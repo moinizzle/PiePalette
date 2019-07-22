@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from kmeans import KMeans
 
-PATH = "apple.jpg"
+PATH = "images/apple.jpg"
 K = 5
 ITERATIONS = 10
 
