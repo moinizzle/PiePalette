@@ -44,4 +44,6 @@
 
 # Credits:
 Algorithm implemented according to [Andrew Ng](notes/notes.pdf)'s notes
-  
+
+# License:
+[MIT](License)
