@@ -12,38 +12,39 @@ class KMeans:
     """Utilizes k-means clustering algorithm to do image segmentation.
     K-means algorithm is an unsupervised learning technique where
     given data is sorted into k clusters.
-    
-    Compresses image and constructs a colour palette (model.pie) from 
-    the given image. Colour is stored as RGB values (model.clusters) 
-    and pie chart is constructed based on on the instances of the 
+
+    Compresses image and constructs a colour palette (model.pie) from
+    the given image. Colour is stored as RGB values (model.clusters)
+    and pie chart is constructed based on on the instances of the
     colour.
 
     Attributes:
-        k: (int)
-        path: (str)
-        verbose: (bool)
-        image: (numpy.ndarray)
-        size: (int)
-        shape: tuple
-        featues: (int)
-        training_set: (numpy.ndarray)
-        labels: (numpy.ndarray)
-        clusters: (numpy.ndarray)
-        distorted_distance: (numpy.float64)
-        compressed_image: (numpy.ndarray)
-        compressed_image_id = (str)
-        pie: (matplotlib.figure.Figure)
-        pie_id: (str)
+        k: number of clusters (int)
+        path: location of image file (str)
+        verbose: whether to print standard output (bool)
+        image: array representation of file (numpy.ndarray)
+        size: size of training data (int)
+        shape: shape of training data (tuple)
+        features: number of features in the training data (int)
+        training_set: given data (numpy.ndarray)
+        labels: image vectors which map to a cluster (numpy.ndarray)
+        clusters: colour vectors (numpy.ndarray)
+        distorted_distance: cost function (sum of squared distances)(
+        numpy.float64)
+        compressed_image: processed image (numpy.ndarray)
+        compressed_image_id = id of processed image (str)
+        pie: pie chart of RGB instances (matplotlib.figure.Figure)
+        pie_id: id of pie chart (str)
 
     To use:
-    >>> model = KMeans('apple.jpg', k=5)
+    >>> model = KMeans('images/apple.jpg', k=5)
     >>> model.k
     5
     >>> model.path
     'apple.jpg'
     >>> model.shape
     (460, 460, 3)
-    >>> model.size 
+    >>> model.size
     634800
     >>> model.features
     3
@@ -65,8 +66,10 @@ class KMeans:
         self._image = cv.cvtColor(self._open_image(path), 4)
         self._image_size = self.image.size
         self._image_shape = self.image.shape
-        self._training_set = self.image.reshape(self.shape[0]*self.shape[1], self.features)
-        self._labels = np.zeros(tuple([self.shape[0]*self.shape[1]])).astype(int)
+        self._training_set = self.image.reshape(
+            self.shape[0]*self.shape[1], self.features)
+        self._labels = np.zeros(
+            tuple([self.shape[0]*self.shape[1]])).astype(int)
         self._clusters = np.random.rand(self.k, self.features)
         self._distance = self._distorted_distance()
         self._compressed_image = None
@@ -77,8 +80,7 @@ class KMeans:
     def _open_image(self, path):
         """Given path of image file, returns a numpy.ndarray object"""
         return cv.imread(path, 1)
-        #.astype(float)
-
+        # .astype(float)
 
     def view(self, image, cvtColor=False):
         """Displays image figure"""
@@ -88,30 +90,29 @@ class KMeans:
         plot.imshow(temp)
         plot.show()
 
-    
     @property
     def k(self):
         """Gets or sets the k value of K-means """
         return self._k
 
     @k.setter
-    def k(self, k): 
+    def k(self, k):
         self._k = k
 
     @property
     def path(self):
         """Gets or sets the image path"""
         return self._path
-    
+
     @path.setter
     def path(self, path):
         self._path = path
-    
+
     @property
     def verbose(self):
         """Gets or sets verbose value"""
         return self._verbose
-    
+
     @verbose.setter
     def verbose(self, arg):
         self._verbose = arg
@@ -125,7 +126,7 @@ class KMeans:
     def size(self):
         """Gets size of image"""
         return self._image_size
-    
+
     @property
     def shape(self):
         """Gets shape of image"""
@@ -135,7 +136,7 @@ class KMeans:
     def features(self):
         """Gets the number of image features"""
         return self.shape[2]
-    
+
     @property
     def training_set(self):
         """Gets the set used for training the model """
@@ -145,7 +146,7 @@ class KMeans:
     def labels(self):
         """Gets the model labels"""
         return self._labels
-    
+
     @property
     def clusters(self):
         """Gets the model clusters"""
@@ -164,16 +165,16 @@ class KMeans:
     def compressed_image(self):
         """Gets or sets model's processed image"""
         return self._compressed_image
-    
+
     @compressed_image.setter
     def compressed_image(self, compressed_image):
         self._compressed_image = compressed_image
-    
+
     @property
     def pie(self):
         """Gets or sets model's pie chart"""
         return self._pie
-    
+
     @pie.setter
     def pie(self, pie):
         self._pie = pie
@@ -182,11 +183,11 @@ class KMeans:
     def pie_id(self):
         """Gets or sets id associated with the model's saved pie chart"""
         return self._pie_id
-    
+
     @pie_id.setter
     def pie_id(self, id):
         self._pie_id = id
-    
+
     @property
     def compressed_image_id(self):
         """Gets or sets id associated with the model's saved processed image"""
@@ -196,15 +197,16 @@ class KMeans:
     def compressed_image_id(self, id):
         self._compressed_image_id = id
 
-
     def train(self, iterations=20, verbose=True):
         """Begins the training process.
 
-        This method will stop the training process if and only if distortion distance has converged
-        or the number of iterations given in the parameters have completed.
+        This method will stop the training process if and only if distortion
+        distance has converged or the number of iterations given in the
+        parameters have completed.
 
         Args:
-            iterations: number of times learning algorithm will traverse through the dataset (int > 0)
+            iterations: number of times learning algorithm will traverse
+            through the dataset (int > 0)
             verbose: whether to print standard output (bool)
         """
 
@@ -212,85 +214,95 @@ class KMeans:
 
         i = 0
         optima_reached = False
-    
+
         while (i < iterations) and not(optima_reached):
-            
+
             if self.verbose:
                 print("Iteration:   {0}".format(i))
 
             # locate the nearest cluster
-            cluster_labels = self._calculate_nearest_cluster(enumerate(self.training_set), list(None for cluster in range(self.k)))    
-            self._relocate_clusters(cluster_labels) # optimize cluster location
-            
-            new_distance = self._distorted_distance() # distance between training data and clusters (cost)
-
+            cluster_labels = self._calculate_nearest_cluster(
+                enumerate(
+                    self.training_set), list(
+                        None for cluster in range(self.k)))
+            # optimize cluster location
+            self._relocate_clusters(cluster_labels)
+            # distance between training data and clusters (cost)
+            new_distance = self._distorted_distance()
             if new_distance >= self.distorted_distance:
                 if self.verbose:
-                    print("Distorted distance has converged at {0}".format(self.distorted_distance))
+                    print(
+                        "Distorted distance has converged at {0}".format(
+                            self.distorted_distance))
                     print("Exiting...")
                 optima_reached = True
             else:
                 self.distorted_distance = new_distance
                 if self.verbose:
-                    print("distorted_distance:  ", "{0:.2f}".format(self.distorted_distance))
-            
-            i+=1
-        
-        # reshape image vectors
-        self._reshape_image(np.zeros((self.shape[0]*self.shape[1], self.features)))       
-        self._construct_pie() # construct colour palette  
+                    print(
+                        "distorted_distance:  ", "{0:.2f}".format(
+                            self.distorted_distance))
 
+            i += 1
+
+        # reshape image vectors
+        self._reshape_image(
+            np.zeros((self.shape[0]*self.shape[1], self.features)))
+        self._construct_pie()  # construct colour palette
 
     def _calculate_nearest_cluster(self, pixels, cluster_labels):
 
         """Assigns pixel value to the nearest cluster (using euclidean distance)
 
         Args:
-            pixels: image vectors (numpy.ndarray) 
-            cluster_labels: indices of k clusters (list) 
+            pixels: image vectors (numpy.ndarray)
+            cluster_labels: indices of k clusters (list)
         Returns:
             cluster labels with assigned RGB values (numpy.ndarray)
         """
 
         # assign pixel (RGB) to nearest cluster label (index)
         for index, rgb in pixels:
-            rgb_vector = np.tile(rgb, (self.k,1))
-            self._labels[index] = np.argmin(self._euclid_distance(rgb_vector, self._clusters), axis=0)
-     
+            rgb_vector = np.tile(rgb, (self.k, 1))
+            self._labels[index] = np.argmin(
+                self._euclid_distance(rgb_vector, self._clusters), axis=0)
+
             if cluster_labels[self._labels[index]] is None:
                 cluster_labels[self._labels[index]] = list()
 
             cluster_labels[self._labels[index]].append(rgb)
-        
-        return cluster_labels
 
+        return cluster_labels
 
     def _relocate_clusters(self, cluster_labels):
         """Moves each cluster towards the mean of RGB values assigned to it
 
         Args:
-            cluster_labels: indices of k clusters, with assigned RGB values (list)
+            cluster_labels: indices of k clusters,with assigned RGB values (
+            list)
         """
         for cluster_label in range(self.k):
             if cluster_labels[cluster_label] is not None:
                 # mean of the pixels assigned to cluster
-                p_sum, p_count = np.asarray(cluster_labels[cluster_label]).sum(axis=0), len(cluster_labels[cluster_label])
+                p_sum, p_count = np.asarray(
+                    cluster_labels[
+                        cluster_label
+                        ]).sum(axis=0), len(cluster_labels[cluster_label])
                 self._clusters[cluster_label] = p_sum / p_count
 
     def _euclid_distance(self, A, B, axis=1):
         """Calculates euclidean distance between point A & B on the given axis
-        
+
         Args:
-            A: (numpy.ndarray) 
+            A: (numpy.ndarray)
             B: (numpy.ndarray)
             axis: (int)
 
         Returns:
-            distance between points A and B 
+            distance between points A and B
         """
         return np.linalg.norm(A - B, axis=axis)
-    
-    
+
     def _distorted_distance(self):
         """Sum of squared distances (cost function)
 
@@ -299,49 +311,60 @@ class KMeans:
         """
         distance = 0
         for i, pixel in enumerate(self.training_set):
-            distance += self._euclid_distance(pixel, self.clusters[self.labels[i]], axis=0)
+            distance += self._euclid_distance(
+                pixel, self.clusters[self.labels[i]], axis=0)
         return distance
-        
-    
+
     def _reshape_image(self, image_vectors):
         """Reshape image vectors back original shape
 
         Args:
-            image_vectors: (numpy.ndarray) 
+            image_vectors: (numpy.ndarray)
         """
 
         for pixel in range(image_vectors.shape[0]):
             cluster_label = self.labels[pixel]
             RGB = self.clusters[cluster_label]
             image_vectors[pixel] = (1/255)*RGB
-        
+
         # processed image (original size)
         self.compressed_image = image_vectors.reshape(self.shape)
 
     def _construct_pie(self):
         """ Constructs a pie chart based on identified colours and instances"""
-        
+
         # count labels and instances
         label_count = count(self.labels)
         label_instances = [instance for instance in label_count.values()]
-        colours = [rgb2hex(self.clusters[label]/255) for label in label_count.keys()]
+        colours = [
+            rgb2hex(
+                self.clusters[label]/255) for label in label_count.keys()]
         self.pie = plot.figure()
-        plot.pie(x=label_instances, labels=label_count.keys(), colors=colours, autopct="%.2f%%")
+        plot.pie(
+            x=label_instances, labels=label_count.keys(
+                ), colors=colours, autopct="%.2f%%")
         plot.tight_layout()
         plot.axis('equal')
 
     def save_image(self):
         """Saves processed image in project directory"""
         self.compressed_image_id = str(uuid.uuid4().hex)
-        plot.imsave(str(self.compressed_image_id + "{}").format(".png"), self.compressed_image)
-        
+        plot.imsave(
+            str(
+                self.compressed_image_id + "{}").format(
+                    ".png"), self.compressed_image)
+
         if self.verbose:
-            print("Compressed image saved at " + (str(self.compressed_image_id + "{}").format(".png")))
+            print(
+                "Compressed image saved at " + (
+                    str(self.compressed_image_id + "{}").format(".png")))
 
     def save_plot(self):
         """Saves pie chart in project directory"""
         self.pie_id = str(uuid.uuid4().hex)
         self.pie.savefig(str(self.pie_id + "{}").format(".png"))
-        
+
         if self.verbose:
-            print("Pie chart saved at " + (str(self.pie_id + "{}").format(".png")))
+            print(
+                "Pie chart saved at " + (
+                    str(self.pie_id + "{}").format(".png")))
