@@ -22,11 +22,11 @@ class KMeans:
         k: number of clusters (int)
         path: location of image file (str)
         verbose: whether to print standard output (bool)
-        image: array representation of file (numpy.ndarray)
+        image: array representation of image (numpy.ndarray)
         size: size of training data (int)
         shape: shape of training data (tuple)
         features: number of features in the training data (int)
-        training_set: given data (numpy.ndarray)
+        training_set: reshaped image vectors (numpy.ndarray)
         labels: image vectors which map to a cluster (numpy.ndarray)
         clusters: colour vectors (numpy.ndarray)
         distorted_distance: cost function (sum of squared distances)(
