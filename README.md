@@ -7,9 +7,9 @@
   chart is constructed based on on the instances of the
   colour.
   
-  I wrote the algorithm (with help from numpy) because I wanted to learn about the inner details and also because I find the
-  subject particularly interesting. My implementation is specifically based on Andrew Ng's lecture notes on the subject 
-  found [here](notes/notes.pdf).
+  I wrote the algorithm from scratch (with help from numpy) because I wanted to learn about the inner details and also because
+  I find the subject particularly interesting. My implementation is specifically based on Andrew Ng's lecture notes on
+  the subject, which can be found [here](notes/notes.pdf).
   
 # Examples
 | Original Image        | Processed Image           | RGB Instances  |
