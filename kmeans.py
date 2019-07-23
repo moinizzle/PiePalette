@@ -41,7 +41,7 @@ class KMeans:
     >>> model.k
     5
     >>> model.path
-    'apple.jpg'
+    'images/apple.jpg'
     >>> model.shape
     (460, 460, 3)
     >>> model.size
