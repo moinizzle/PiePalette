@@ -1,7 +1,7 @@
 # About
   Utilizes k-means clustering algorithm to do image segmentation.
-  K-means algorithm is an unsupervised learning technique where
-  given data is sorted into k clusters.
+  K-means is an unsupervised learning technique where
+  given data is sorted into *k* clusters.
   Compresses image and constructs a colour palette from
   the given image. Colour is stored as RGB values and pie 
   chart is constructed based on on the instances of the
