@@ -6,5 +6,5 @@
 ![kawhi](images/kawhi.jpg) | ![](examples/kawhi/4ee1a29c74474d04a555b28dffa01ab7.png)  | ![](examples/kawhi/4aaf86e3177c4cfe9e962812a8e0983f.png) |
 
 # Credits:
-[Andrew Ng](notes/notes.pdf)
+Algorithm implemented according to [Andrew Ng](notes/notes.pdf)'s notes
   
