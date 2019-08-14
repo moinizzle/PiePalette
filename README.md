@@ -4,7 +4,7 @@
   given data is sorted into *k* clusters.
   Compresses image and constructs a colour palette from
   the given image. Colour is stored as RGB values and pie 
-  chart is constructed based on on the instances of the
+  chart is constructed based on the instances of the
   colour.
   
   I wrote the algorithm from scratch (with help from numpy) because I wanted to learn about the inner details and also because
